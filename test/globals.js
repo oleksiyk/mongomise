@@ -1,9 +1,10 @@
 "use strict";
 
-global.mongomise = (process && process.env && process.env.MONGOMISE_COV)
-    ? require('../lib-cov')
-    : require('../lib');
+global.libPath = (process && process.env && process.env.MONGOMISE_COV)
+    ? '../lib-cov'
+    : '../lib';
 
+global.mongomise = require(global.libPath)
 
 global.sinon = require("sinon");
 global.chai = require("chai");

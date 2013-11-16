@@ -67,7 +67,7 @@ describe('GridStore', function () {
         'stream',
         'write'
     ].forEach(function (m) {
-        it('#' + m + '()', function() {
+        it('#' + m + '() exists', function() {
             gridStore.should.respondTo(m)
         })
     });
@@ -83,7 +83,7 @@ describe('GridStore', function () {
         'position',
         'fileId'
     ].forEach(function(p) {
-        it('#' + p, function() {
+        it('#' + p + ' exists', function() {
             gridStore.should.have.property(p)
         })
     })
