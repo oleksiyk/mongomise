@@ -36,7 +36,40 @@ require('mongomise').connect('mongodb://localhost:27017/test', {
 }).fail(function(err){
     console.error(err);
 })
-``` 
+```
+
+### GridFS
+
+#### Save file from filesystem to GridFS
+```javascript
+// db is instance of database connection
+// id is ObjectID (optional)
+
+// create GridStore object
+gridStore = new mongomise.GridStore(db, id, 'test-file', 'w', {
+    content_type: 'image/png',
+    metadata: {
+        test: 'value'
+    }
+})
+
+// populate it with file from filesystem
+gridStore.fromFile(filePath)
+    .then(function(){ ... })
+    .fail(function(err){ console.error(err) })
+
+```
+
+#### Save file from GridFS to filesystem
+```javascript
+// open GridStore for reading
+var gridStore = new mongomise.GridStore(db, id, 'r');
+
+// save it to file on filesystem
+gridStore.toFile(filePath)
+    .then(function() { ... })
+    .fail(function(err){ console.error(err) })
+```
 
 ### Status
 Early beta, unstable.
