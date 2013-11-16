@@ -12,7 +12,7 @@ mongomise: node_modules lib/*
 # Tests
 #
 test: mongomise
-	mocha
+	@mocha
 
 
 #
@@ -22,7 +22,7 @@ lib-cov: clean-cov
 	@jscoverage --no-highlight lib lib-cov
 
 test-cov: lib-cov
-	@BEE_COV=1 mocha \
+	@MONGOMISE_COV=1 mocha \
 		--require ./test/globals \
 		--reporter html-cov \
 		> coverage.html
