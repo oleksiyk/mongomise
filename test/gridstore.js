@@ -9,12 +9,19 @@ var path   = require('path');
 var crypto = require('crypto');
 
 var testfile = {
+    id: new mongomise.ObjectID(),
     path: path.dirname(__filename) + '/test-data/image.jpg',
+    filename: '/test-data/image.jpg',
     length: 130566,
-    md5: '0b864c06dc35f4fe73afcede3310d8bd'
+    md5: '0b864c06dc35f4fe73afcede3310d8bd',
+    contentType: 'image/jpeg',
+    metadata: {
+        test: 'value'
+    },
+    uploadDate: Date.now()
 }
 
-var db, id = new mongomise.ObjectID(), gridStore;
+var db, gridStore;
 
 var fileMD5 = function(filename) {
     var deferred = Q.defer();
@@ -40,10 +47,9 @@ describe('GridStore', function () {
     })
 
     it('GridStore constructor returns GridStore object', function() {
-        gridStore = new mongomise.GridStore(db, id, 'test-file', 'w', {
-            metadata: {
-                test: 'value'
-            }
+        gridStore = new mongomise.GridStore(db, testfile.id, testfile.filename, 'w', {
+            content_type: testfile.contentType,
+            metadata: testfile.metadata
         })
 
         gridStore.should.be.a('object').and.is.an.instanceof(mongomise.GridStore)
@@ -103,18 +109,37 @@ describe('GridStore', function () {
             })
         })
 
-        it('GridFS file should have correct properties', function() {
+        it('GridFS file record should have correct properties', function() {
             return gridStore.collection().then(function(collection) {
-                return collection.findById(id).then(function(file) {
+                return collection.findById(testfile.id).then(function(file) {
                     file.should.be.a('object');
                     file.should.have.property('md5', testfile.md5);
                     file.should.have.property('length', testfile.length);
+                    file.should.have.property('contentType', testfile.contentType)
+                    file.should.have.property('filename', testfile.filename)
+                    file.should.have.property('uploadDate')
+                    file.uploadDate.getTime().should.be.closeTo(testfile.uploadDate, 500)
+                    file.should.have.property('metadata').that.is.deep.equal(testfile.metadata)
                 })
             })
         })
 
+        it('GridStore object should have correct properties', function() {
+            var gs = new mongomise.GridStore(db, testfile.id, 'r');
+
+            return gs.open().then(function() {
+                gs.should.have.property('length', testfile.length)
+                gs.should.have.property('md5', testfile.md5)
+                gs.should.have.property('contentType', testfile.contentType)
+                gs.should.have.property('filename', testfile.filename)
+                gs.should.have.property('uploadDate')
+                gs.uploadDate.getTime().should.be.closeTo(testfile.uploadDate, 500)
+                gs.should.have.property('metadata').that.is.deep.equal(testfile.metadata)
+            })
+        })
+
         it('#toFile() should write file from GridFS to filesystem', function() {
-            var gs = new mongomise.GridStore(db, id, 'r');
+            var gs = new mongomise.GridStore(db, testfile.id, 'r');
             return gs.toFile(tmpFile).then(function() {
                 return fs.existsSync(tmpFile).should.be.true;
             })
