@@ -140,7 +140,8 @@ describe('GridStore', function () {
 
         it('#toFile() should write file from GridFS to filesystem', function() {
             var gs = new mongomise.GridStore(db, testfile.id, 'r');
-            return gs.toFile(tmpFile).then(function() {
+            return gs.toFile(tmpFile).then(function(_gs) {
+                _gs.should.be.deep.equal(gs)
                 return fs.existsSync(tmpFile).should.be.true;
             })
         })
