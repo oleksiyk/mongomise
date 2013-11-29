@@ -2,11 +2,11 @@
 
 /* global mongomise, describe, it, before, after */
 
-var Q      = require('q');
-// var _   = require('lodash');
-var fs     = require('fs');
-var path   = require('path');
-var crypto = require('crypto');
+var Promise = require('bluebird');
+// var _    = require('lodash');
+var fs      = require('fs');
+var path    = require('path');
+var crypto  = require('crypto');
 
 var testfile = {
     id: new mongomise.ObjectID(),
@@ -24,7 +24,7 @@ var testfile = {
 var db, gridStore;
 
 var fileMD5 = function(filename) {
-    var deferred = Q.defer();
+    var deferred = Promise.defer();
     var shasum = crypto.createHash('md5');
     var s = fs.ReadStream(filename);
     s.on('data', function(d) {
