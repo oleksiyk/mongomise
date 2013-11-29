@@ -33,7 +33,7 @@ require('mongomise').connect('mongodb://localhost:27017/test', {
     return usersCollection.findAll()
 }).then(function (users) {
     console.log(users)
-}).fail(function(err){
+}).catch(function(err){
     console.error(err);
 })
 ```
@@ -56,7 +56,7 @@ gridStore = new mongomise.GridStore(db, id, 'test-file', 'w', {
 // populate it with file from filesystem
 gridStore.fromFile(filePath)
     .then(function(){ ... })
-    .fail(function(err){ console.error(err) })
+    .catch(function(err){ console.error(err) })
 
 ```
 
@@ -68,7 +68,7 @@ var gridStore = new mongomise.GridStore(db, id, 'r');
 // save it to file on filesystem
 gridStore.toFile(filePath)
     .then(function() { ... })
-    .fail(function(err){ console.error(err) })
+    .catch(function(err){ console.error(err) })
 ```
 
 ### Status
