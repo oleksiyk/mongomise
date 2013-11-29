@@ -1,6 +1,6 @@
 # Mongomise
 
-Mongomise (Mongo + Promise) is a Promised version of [node-mongodb-native](https://github.com/mongodb/node-mongodb-native) client library for MongoDB. It turns all public methods of Db, Collection, Cursor and Admin objects into functions returning [Q](https://github.com/kriskowal/q) promises.
+Mongomise (Mongo + Promise) is a Promised version of [node-mongodb-native](https://github.com/mongodb/node-mongodb-native) client library for MongoDB. It turns all public methods of Db, Collection, Cursor and Admin objects into functions returning [Bluebird](https://github.com/petkaantonov/bluebird) promises.
 
 It also add some convenient methods such as
 
